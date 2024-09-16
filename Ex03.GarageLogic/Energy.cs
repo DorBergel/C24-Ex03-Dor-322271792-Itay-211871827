@@ -8,8 +8,8 @@ namespace Ex03.GarageLogic
 {
     public abstract class Energy
     {
-        float m_CurrentEnergy;
-        readonly float m_MaxEnergy;
+        private float m_CurrentEnergy;
+        private readonly float m_MaxEnergy;
         
         public Energy(float i_CurrentEnergy,  float i_MaxEnergy)
         {
@@ -17,7 +17,7 @@ namespace Ex03.GarageLogic
             m_MaxEnergy = i_MaxEnergy;
         }
 
-        public abstract void Refill(float i_RefillEnergy);
+        public abstract void Refill(float i_RefillEnergy, eFuelType? i_ChosenFuelType = null);
 
         public float CurrentEnergy
         {
