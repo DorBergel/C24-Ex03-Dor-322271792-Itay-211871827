@@ -30,5 +30,25 @@ namespace Ex03.GarageLogic
                 // TODO Value out of range exception
             }
         }
+
+        public float CurrentAirPressure
+        {
+            get
+            {
+                return m_CurrentAirPressure;
+            }
+            set
+            {
+                m_CurrentAirPressure = value;
+            }
+        }
+
+        public float MaximumAirPressure
+        {
+            get
+            {
+                return m_MaxAirPressure;
+            }
+        }
     }
 }

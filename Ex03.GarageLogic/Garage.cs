@@ -36,5 +36,80 @@ namespace Ex03.GarageLogic
             GarageClient newGarageClient = new GarageClient(i_ClientName, i_ClientPhoneNumber, i_ClientVehilce);
             m_GarageClients.Add(newGarageClient.GetHashCode(), newGarageClient);
         }
+
+        public List<string> GetLicensePlatesList(eVehicleStatus? i_VehicleStatus = null)
+        {
+            List<string> licensePlatesList;
+            licensePlatesList = m_GarageClients.Count > 0 ? new List<string>() : null;
+
+            if (i_VehicleStatus == null)
+            {
+                foreach(var item in m_GarageClients)
+                {
+                    licensePlatesList.Add(item.Value.ClientVehicle.LicensePlate);
+                }
+            }
+            else
+            {
+                switch (i_VehicleStatus)
+                {
+                    case eVehicleStatus.InRepair:
+                        foreach(var item in m_GarageClients)
+                        {
+                            if(item.Value.VehicleStatus == eVehicleStatus.InRepair)
+                            {
+                                licensePlatesList.Add(item.Value.ClientVehicle.LicensePlate);
+                            }
+                        }
+                        break;
+
+                    case eVehicleStatus.Repaired:
+                        foreach (var item in m_GarageClients)
+                        {
+                            if (item.Value.VehicleStatus == eVehicleStatus.Repaired)
+                            {
+                                licensePlatesList.Add(item.Value.ClientVehicle.LicensePlate);
+                            }
+                        }
+                        break;
+
+                    case eVehicleStatus.Paid:
+                        foreach (var item in m_GarageClients)
+                        {
+                            if (item.Value.VehicleStatus == eVehicleStatus.Paid)
+                            {
+                                licensePlatesList.Add(item.Value.ClientVehicle.LicensePlate);
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return licensePlatesList;
+        }
+
+        public void ChangeVehicleStatus(string i_LicensePlate, eVehicleStatus i_NewVehicleStatus)
+        {
+            m_GarageClients[i_LicensePlate.GetHashCode()].VehicleStatus = i_NewVehicleStatus;
+        }
+
+        public void InflateWheelsToMaximum(string i_LicensePlate)
+        {
+            foreach(Wheel vehicleWheel in m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.WheelsCollection)
+            {
+                vehicleWheel.InflateWheel(vehicleWheel.MaximumAirPressure - vehicleWheel.CurrentAirPressure);
+            }
+        }
+
+        public void RefillRegularVehicle(string i_LicensePlate, eFuelType i_RequiredFuelType, float i_RequiredFuelToRefill)
+        {
+            m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(i_RequiredFuelToRefill, i_RequiredFuelType);
+        }
+
+        public void RefillElectricVehicle(string i_LicensePlate, float i_RequiredMinutesToRefill)
+        {
+            float requiredHoursToRefill = i_RequiredMinutesToRefill / 60;
+            m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(requiredHoursToRefill);
+        }
     }
 }
