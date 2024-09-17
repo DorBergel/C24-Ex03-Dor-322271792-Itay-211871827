@@ -12,7 +12,7 @@ namespace Ex03.GarageLogic
             base(i_CurrentEnergy, i_MaxEnergy)
         { }
 
-        public override void Refill(float i_RefillEnergy)
+        public override void Refill(float i_RefillEnergy, eFuelType? i_ChosenFuelType = null)
         {
             if (i_RefillEnergy + CurrentEnergy <= MaxEnergy)
             {

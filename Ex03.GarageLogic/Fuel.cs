@@ -28,7 +28,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public eFuelType FuelType
+        public eFuelType? FuelType
         {
             get
             {
