@@ -50,5 +50,10 @@ namespace Ex03.GarageLogic
                 return m_MaxAirPressure;
             }
         }
+
+        public override string ToString()
+        {
+            return $"{m_Vendor}: {m_CurrentAirPressure}/{m_MaxAirPressure}";
+        }
     }
 }

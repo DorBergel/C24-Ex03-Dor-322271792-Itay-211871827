@@ -111,5 +111,41 @@ namespace Ex03.GarageLogic
             float requiredHoursToRefill = i_RequiredMinutesToRefill / 60;
             m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(requiredHoursToRefill);
         }
+
+        public void PrintCarDetailesByLicensePlate(string i_LicensePlate)
+        {
+           
+            for(int i=0; i <  m_GarageClients.Count; i++)
+            {
+                if (GarageClients[i].ClientVehicle.LicensePlate == i_LicensePlate)
+                {
+                    Console.WriteLine("License Plate: {0}", i_LicensePlate);
+                    Console.WriteLine("Model: {0}", GarageClients[i].ClientVehicle.VehicleVendor);
+                    Console.WriteLine("Owner: {0}", GarageClients[i].ClientName);
+                    Console.WriteLine("Status in Garage: {0}", GarageClients[i].VehicleStatus);
+                    Console.WriteLine("Wheels: ");
+                    foreach (Wheel w in GarageClients[i].ClientVehicle.WheelsCollection)
+                    {
+                        Console.WriteLine("\t{0}", w.ToString());
+                    }
+                    
+                    if(GarageClients[i].ClientVehicle.VehicleEnergySource is Fuel)
+                    {
+                        Console.WriteLine("Fuel - {0}: {1}/{2}",
+                            (GarageClients[i].ClientVehicle.VehicleEnergySource as Fuel).FuelType.Value.ToString(),
+                            GarageClients[i].ClientVehicle.VehicleEnergySource.CurrentEnergy,
+                            GarageClients[i].ClientVehicle.VehicleEnergySource.MaxEnergy);
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Electric: {0}/{1}",
+                            GarageClients[i].ClientVehicle.VehicleEnergySource.CurrentEnergy,
+                            GarageClients[i].ClientVehicle.VehicleEnergySource.MaxEnergy);
+                    }
+                    break;
+                }
+            }
+        }
     }
 }
