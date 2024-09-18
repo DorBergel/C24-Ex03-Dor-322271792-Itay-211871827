@@ -16,11 +16,11 @@ namespace Ex03.GarageLogic
         {
             if (i_RefillEnergy + CurrentEnergy <= MaxEnergy)
             {
-                CurrentEnergy = i_RefillEnergy;
+                CurrentEnergy += i_RefillEnergy;
             }
             else
             {
-                // TODO Value out of range exception
+                throw new ValueOutOfRangeException(0, MaxEnergy - CurrentEnergy);
             }
         }
     }

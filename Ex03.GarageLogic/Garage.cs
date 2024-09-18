@@ -97,7 +97,7 @@ namespace Ex03.GarageLogic
         {
             foreach(Wheel vehicleWheel in m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.WheelsCollection)
             {
-                vehicleWheel.InflateWheel(vehicleWheel.MaximumAirPressure - vehicleWheel.CurrentAirPressure);
+                vehicleWheel.InflateWheel(vehicleWheel.MaxAirPressure - vehicleWheel.CurrentAirPressure);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Ex03.GarageLogic
         public void PrintCarDetailesByLicensePlate(string i_LicensePlate)
         {
            
-            for(int i=0; i <  m_GarageClients.Count; i++)
+            for(int i = 0; i < m_GarageClients.Count; i++)
             {
                 if (GarageClients[i].ClientVehicle.LicensePlate == i_LicensePlate)
                 {

@@ -27,7 +27,14 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                m_CurrentEnergy = value;
+                if (value >= 0 && value <= m_MaxEnergy)
+                {
+                    m_CurrentEnergy = value;
+                }
+                else
+                {
+                    throw new ValueOutOfRangeException(0, m_MaxEnergy);
+                }
             }
         }
 
@@ -38,6 +45,5 @@ namespace Ex03.GarageLogic
                 return m_MaxEnergy;
             }
         }
-
     }
 }

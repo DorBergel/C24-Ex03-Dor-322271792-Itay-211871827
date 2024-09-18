@@ -18,14 +18,27 @@ namespace Ex03.GarageLogic
 
         public override void Refill(float i_RefillEnergy, eFuelType? i_ChosenFuelType)
         {
-            if(i_RefillEnergy + CurrentEnergy <= MaxEnergy && i_ChosenFuelType == m_FuelType)
+            if(i_RefillEnergy + CurrentEnergy <= MaxEnergy && CheckIfFuelTypeMatch(i_ChosenFuelType))
             {
-                CurrentEnergy = i_RefillEnergy;
+                CurrentEnergy += i_RefillEnergy;
             }
             else
             {
-                // TODO Value out of range exception
+                throw new ValueOutOfRangeException(0, MaxEnergy - CurrentEnergy);
             }
+        }
+
+        public bool CheckIfFuelTypeMatch(eFuelType? i_FuelType)
+        {
+            bool isFuelTypeMatch = i_FuelType == m_FuelType;
+
+            if (isFuelTypeMatch == false)
+            {
+                string errorMsg = String.Format("Error: Type of fuel that you chose ({0}) does not match to the fuel type of the vehicle.", i_FuelType.ToString());
+                throw new ArgumentException(errorMsg);
+            }
+
+            return isFuelTypeMatch;
         }
 
         public eFuelType? FuelType

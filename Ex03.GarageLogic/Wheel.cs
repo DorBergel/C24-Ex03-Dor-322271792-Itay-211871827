@@ -27,7 +27,7 @@ namespace Ex03.GarageLogic
             }
             else
             {
-                // TODO Value out of range exception
+                throw new ValueOutOfRangeException(0, m_MaxAirPressure);
             }
         }
 
@@ -39,11 +39,18 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                m_CurrentAirPressure = value;
+                if (value >= 0 && value <= m_MaxAirPressure)
+                {
+                    m_CurrentAirPressure = value;
+                }
+                else
+                {
+                    throw new ValueOutOfRangeException(0, m_MaxAirPressure);
+                }
             }
         }
 
-        public float MaximumAirPressure
+        public float MaxAirPressure
         {
             get
             {
