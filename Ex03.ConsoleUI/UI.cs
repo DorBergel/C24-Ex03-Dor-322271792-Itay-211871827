@@ -159,8 +159,38 @@ namespace Ex03.ConsoleUI
             }
             else
             {
+                eFuelType fuelType;
+                float currentEnergy;
+                string stringCurrentEnergy;
+                Energy vehicleEnergy;
+
                 string stringVehicleType = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleType)));
                 eVehicleType vehicleType = (eVehicleType)Enum.Parse(typeof(eVehicleType), stringVehicleType);
+                string wheelsVendor = GetUserInput<string>("Enter the vendor of your vehicle's wheels.");
+                string stringCurrentAirPressure = GetUserInput<float>("Enter current air pressure of all wheels.");
+                float wheelsCurrentAirPressure = float.Parse(stringCurrentAirPressure);
+                string stringEnergyType = ChooseFromListOfOptions(Enum.GetNames(typeof(eEngineType)));
+                eEngineType energyType = (eEngineType)Enum.Parse(typeof (eEngineType), stringEnergyType);
+                
+                switch (energyType)
+                {
+                    case eEngineType.Fuel:
+                        string stringFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)));
+                        fuelType = (eFuelType)Enum.Parse(typeof(eFuelType), stringFuelType);
+                        stringCurrentEnergy = GetUserInput<float>("Enter your vehicle's current energy (or fuel).");
+                        currentEnergy = float.Parse(stringCurrentEnergy);
+                        break;
+
+                    case eEngineType.Electric:
+                        stringCurrentEnergy = GetUserInput<float>("Enter your vehicle's current energy (or fuel).");
+                        currentEnergy = float.Parse(stringCurrentEnergy);
+                        break;
+                }
+
+                switch (vehicleType)
+                {
+
+                }
             }
         }
     }
