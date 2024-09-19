@@ -149,6 +149,7 @@ namespace Ex03.ConsoleUI
             return isValidInput;
         }
 
+        // Need to think again
         public void InsertNewVehicleToGarage()
         {
             string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
@@ -192,6 +193,31 @@ namespace Ex03.ConsoleUI
 
                 }
             }
+        }
+
+        public void ShowLicensePlatesList(eVehicleStatus? i_VehicleStatus)
+        {
+            List<string> licensePlatesList;
+            string[] vehicleStatusFilter = new string[4];
+            vehicleStatusFilter[0] = eVehicleStatus.InRepair.ToString();
+            vehicleStatusFilter[1] = eVehicleStatus.Repaired.ToString();
+            vehicleStatusFilter[2] = eVehicleStatus.Paid.ToString();
+            vehicleStatusFilter[3] = "None";
+
+            Console.Clear();
+            Console.WriteLine("You chose to see list of license plates in the garage. Please enter the type of filter you would like to perform.");
+            string userChoice = ChooseFromListOfOptions(vehicleStatusFilter);
+            licensePlatesList = userChoice == "None" ? m_Garage.GetLicensePlatesList() : m_Garage.GetLicensePlatesList((eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), userChoice));
+            Console.WriteLine(Environment.NewLine);
+            foreach(string licensePlate in  licensePlatesList)
+            {
+                Console.WriteLine(licensePlate);
+            }
+        }
+
+        public void ChangeVehicleStatus(string i_LicensePlate)
+        {
+
         }
     }
 }
