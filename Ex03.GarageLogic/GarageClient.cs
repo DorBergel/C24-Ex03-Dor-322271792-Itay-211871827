@@ -63,5 +63,31 @@ namespace Ex03.GarageLogic
         {
             return m_ClientVehicle.LicensePlate.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            string clientVehicleDetails;
+            StringBuilder wheelsDetails = new StringBuilder();
+
+            for (int i = 0; i < m_ClientVehicle.WheelsCollection.Count; i++) 
+            {
+                wheelsDetails.AppendLine($"Wheel #{i + 1}: {m_ClientVehicle.WheelsCollection[i].ToString()}");
+            }
+
+            clientVehicleDetails = String.Format("License plate: {0}{1}" +
+                "Model: {2}{1}" +
+                "Owner name: {3}{1}" +
+                "Owner phone number: {4}{1}" +
+                "Status in garage: {5}{1}" +
+                "Wheels details (vendor, air pressure): {1}" +
+                "{6}" +
+                "Energy source: {7}{1}" +
+                "Energy status (current energy / max energy): {8}/{9}{1}",
+                m_ClientVehicle.LicensePlate, Environment.NewLine, m_ClientVehicle.VehicleVendor,
+                m_ClientName, m_ClientPhoneNumber, m_ClientVehicleStatus, wheelsDetails, _, m_ClientVehicle.VehicleEnergySource.CurrentEnergy, m_ClientVehicle.VehicleEnergySource.MaxEnergy);
+            // Need to add: energy type, fuel type, extra properties for each vehicle type...
+
+            return clientVehicleDetails;
+        }
     }
 }

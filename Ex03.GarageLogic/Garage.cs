@@ -106,7 +106,7 @@ namespace Ex03.GarageLogic
             m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(i_RequiredFuelToRefill, i_RequiredFuelType);
         }
 
-        public void RefillElectricVehicle(string i_LicensePlate, float i_RequiredMinutesToRefill)
+        public void RefillElectricVehicle(string i_LicensePlate, int i_RequiredMinutesToRefill)
         {
             float requiredHoursToRefill = i_RequiredMinutesToRefill / 60;
             m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(requiredHoursToRefill);
@@ -129,7 +129,7 @@ namespace Ex03.GarageLogic
                         Console.WriteLine("\t{0}", w.ToString());
                     }
                     
-                    if(GarageClients[i].ClientVehicle.VehicleEnergySource is Fuel)
+                    if (GarageClients[i].ClientVehicle.VehicleEnergySource is Fuel)
                     {
                         Console.WriteLine("Fuel - {0}: {1}/{2}",
                             (GarageClients[i].ClientVehicle.VehicleEnergySource as Fuel).FuelType.Value.ToString(),

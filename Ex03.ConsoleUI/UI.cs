@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Ex03.ConsoleUI
@@ -195,7 +196,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public void ShowLicensePlatesList(eVehicleStatus? i_VehicleStatus)
+        public void ShowLicensePlatesList()
         {
             List<string> licensePlatesList;
             string[] vehicleStatusFilter = new string[4];
@@ -207,17 +208,65 @@ namespace Ex03.ConsoleUI
             Console.Clear();
             Console.WriteLine("You chose to see list of license plates in the garage. Please enter the type of filter you would like to perform.");
             string userChoice = ChooseFromListOfOptions(vehicleStatusFilter);
-            licensePlatesList = userChoice == "None" ? m_Garage.GetLicensePlatesList() : m_Garage.GetLicensePlatesList((eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), userChoice));
+            licensePlatesList = userChoice == "None" ? m_Garage.GetLicensePlatesList() : 
+                m_Garage.GetLicensePlatesList((eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), userChoice));
             Console.WriteLine(Environment.NewLine);
-            foreach(string licensePlate in  licensePlatesList)
+            foreach(string licensePlate in licensePlatesList)
             {
                 Console.WriteLine(licensePlate);
             }
         }
 
-        public void ChangeVehicleStatus(string i_LicensePlate)
+        public void ChangeVehicleStatus()
         {
-
+            Console.Clear();
+            Console.WriteLine("You chose to change status of vehicle in the garage. Follow the instructions.");
+            string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
+            Console.WriteLine("Please chose new status of vehicle with license plate: {0}", vehicleLicensePlate);
+            string choiceOfStatus = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleStatus)));
+            eVehicleStatus newVehicleStatus = (eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), choiceOfStatus);
+            m_Garage.ChangeVehicleStatus(vehicleLicensePlate, newVehicleStatus);
+            Thread.Sleep(100);
+            Console.WriteLine("The status of vehicle with license plate {0} successfully changed to {1}.");
         }
+
+        public void InflateWheelsAirPressure()
+        {
+            Console.Clear();
+            Console.WriteLine("You chose to inflate air pressure of the wheels to maximum. Follow the instructions.");
+            string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
+            m_Garage.InflateWheelsToMaximum(vehicleLicensePlate);
+            Thread.Sleep(100);
+            Console.WriteLine("The air pressure in all wheels of vehicle with license plate {0} is inflated to the maximum {1}", 
+                vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.GetMaxAirPressure());
+        }
+
+        public void RefillRegularVehicle()
+        {
+            Console.Clear();
+            Console.WriteLine("You chose to fill fuel to a regular vehicle. Follow the instructions.");
+            string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
+            Console.WriteLine("Please chose fuel type of vehicle with license plate: {0}", vehicleLicensePlate);
+            string choiceOfFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)));
+            string choiceOfFuelAmount = GetUserInput<float>("Enter amount of fuel that you would like to fill (in liters):");
+            m_Garage.RefillRegularVehicle(vehicleLicensePlate, (eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType), float.Parse(choiceOfFuelAmount));
+            Thread.Sleep(100);
+            Console.WriteLine("Filling fuel for the vehicle with license plate {0} completed! The current amount of fuel is {1} liters", 
+                vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy);
+        }
+
+        public void RefillElectricVehicle()
+        {
+            Console.Clear();
+            Console.WriteLine("You chose to charge an elecrtic vehicle. Follow the instructions.");
+            string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
+            string choiceOfMinutesToCharge = GetUserInput<float>("Enter the number of minutes you wolud like to charge the vehicle:");
+            m_Garage.RefillElectricVehicle(vehicleLicensePlate, int.Parse(choiceOfMinutesToCharge));
+            Thread.Sleep(100);
+            Console.WriteLine("Charging the vehicle with license plate {0} completed! The current battery is {1} hours",
+                vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy);
+        }
+
+        // Need to implement method that showing specific vehicle details
     }
 }

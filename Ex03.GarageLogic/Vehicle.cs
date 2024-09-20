@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public class Vehicle
+    public abstract class Vehicle
     {
         // In doc wrote "percentage of current energy - maybe to add float variable that describe it
         string m_VehicleVendor;
@@ -76,5 +76,14 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public float GetMaxAirPressure()
+        {
+            return m_WheelsCollection[0].MaxAirPressure;
+        }
+
+        public string GetWheelsVendor()
+        {
+            return m_WheelsCollection[0].
+        }
     }
 }
