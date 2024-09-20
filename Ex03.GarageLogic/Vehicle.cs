@@ -8,7 +8,6 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        // In doc wrote "percentage of current energy - maybe to add float variable that describe it
         string m_VehicleVendor;
         string m_LicensePlate;
         Energy m_VehicleEnergySource;
@@ -83,7 +82,27 @@ namespace Ex03.GarageLogic
 
         public string GetWheelsVendor()
         {
-            return m_WheelsCollection[0].
+            return m_WheelsCollection[0].Vendor;
+        }
+
+        public override string ToString()
+        {
+            string output;
+            StringBuilder wheelsDetails = new StringBuilder();
+
+            for (int i = 0; i < m_WheelsCollection.Count; i++)
+            {
+                wheelsDetails.AppendLine($"Wheel #{i + 1}: {m_WheelsCollection[i].ToString()}");
+            }
+
+            output = String.Format("License plate: {0}{1}" +
+                "Vehicle's vendor: {2}{1}" +
+                "{3}{1}" +
+                "{4}{1}",
+                m_LicensePlate, Environment.NewLine, m_VehicleVendor, 
+                m_VehicleEnergySource.ToString(), wheelsDetails.ToString());
+
+            return output;
         }
     }
 }

@@ -33,5 +33,17 @@ namespace Ex03.GarageLogic
                 return m_LuggageVolume;
             }
         }
+
+        public override string ToString()
+        {
+            string output = String.Format("{0}{1}" +
+                "{2}{1}" +
+                "Luggage volume: {3}{1}",
+                base.ToString(), Environment.NewLine, 
+                m_IsIncludeHazardousMaterials ? "Including hazardous materials" : "Not include hazardous materials",
+                m_LuggageVolume);
+
+            return output;
+        }
     }
 }

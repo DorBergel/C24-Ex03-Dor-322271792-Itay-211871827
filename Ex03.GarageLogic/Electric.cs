@@ -23,5 +23,10 @@ namespace Ex03.GarageLogic
                 throw new ValueOutOfRangeException(0, MaxEnergy - CurrentEnergy);
             }
         }
+
+        public override string ToString()
+        {
+            return $"Battery status: {CurrentEnergy}/{MaxEnergy} ({(int)((CurrentEnergy / MaxEnergy) * 100)}%)";
+        }
     }
 }

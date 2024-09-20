@@ -33,5 +33,15 @@ namespace Ex03.GarageLogic
                 return m_NumOfCarDoors;
             }
         }
+
+        public override string ToString()
+        {
+            string output = String.Format("{0}{1}" +
+                "Car color: {2}{1}" +
+                "Number of doors: {3}{1}",
+                base.ToString(), Environment.NewLine, m_CarColor, m_NumOfCarDoors);
+
+            return output;
+        }
     }
 }

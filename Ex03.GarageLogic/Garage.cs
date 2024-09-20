@@ -23,14 +23,12 @@ namespace Ex03.GarageLogic
             }
         }
 
-        // Methods for each action in the garage
-        
-        // Page 2 in doc, section 1
         public bool IsVehicleExists(string i_LicensePlateNumber)
         {
             return m_GarageClients != null && m_GarageClients.ContainsKey(i_LicensePlateNumber.GetHashCode());
         }
         
+        // Need to think if calling the factory from UI or by the the garage
         public void AddNewClient(string i_ClientName, string i_ClientPhoneNumber, Vehicle i_ClientVehilce)
         {
             GarageClient newGarageClient = new GarageClient(i_ClientName, i_ClientPhoneNumber, i_ClientVehilce);
@@ -112,6 +110,7 @@ namespace Ex03.GarageLogic
             m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(requiredHoursToRefill);
         }
 
+        // Check before submission
         public void PrintCarDetailesByLicensePlate(string i_LicensePlate)
         {
            

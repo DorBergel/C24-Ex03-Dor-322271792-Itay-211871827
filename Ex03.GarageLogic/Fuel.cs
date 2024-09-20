@@ -48,5 +48,10 @@ namespace Ex03.GarageLogic
                 return m_FuelType;
             }
         }
+
+        public override string ToString()
+        {
+            return $"Fuel type: {m_FuelType}, Fuel status: {CurrentEnergy}/{MaxEnergy} ({(int)((CurrentEnergy / MaxEnergy) * 100)}%)";
+        }
     }
 }
