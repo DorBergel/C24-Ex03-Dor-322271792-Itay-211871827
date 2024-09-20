@@ -10,7 +10,8 @@ namespace Ex03.ConsoleUI
     {
         public static void Main()
         {
-
+            UI userInteface = new UI();
+            userInteface.ManageApp();
         }
     }
 }

@@ -101,7 +101,14 @@ namespace Ex03.GarageLogic
 
         public void RefillRegularVehicle(string i_LicensePlate, eFuelType i_RequiredFuelType, float i_RequiredFuelToRefill)
         {
-            m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(i_RequiredFuelToRefill, i_RequiredFuelType);
+            if ((m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource as Fuel).FuelType == i_RequiredFuelType)
+            {
+                m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(i_RequiredFuelToRefill, i_RequiredFuelType);
+            }
+            else
+            {
+                throw new ArgumentException("The fuel type that you chose does not match to the vehicle's fuel type.");
+            }
         }
 
         public void RefillElectricVehicle(string i_LicensePlate, int i_RequiredMinutesToRefill)
