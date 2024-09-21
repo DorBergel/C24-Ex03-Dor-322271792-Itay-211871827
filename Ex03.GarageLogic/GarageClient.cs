@@ -8,9 +8,8 @@ namespace Ex03.GarageLogic
 {
     public class GarageClient
     {
-        // Check how to write readonly data members
-        private readonly string m_ClientName;
-        private readonly string m_ClientPhoneNumber;
+        private string m_ClientName;
+        private string m_ClientPhoneNumber;
         private Vehicle m_ClientVehicle;
         private eVehicleStatus m_ClientVehicleStatus;
 
@@ -19,7 +18,6 @@ namespace Ex03.GarageLogic
             m_ClientName = i_ClientName;
             m_ClientPhoneNumber = i_ClientPhoneNumber;
             m_ClientVehicle = i_ClientVehicle;
-            // Verify with Dor !!
             m_ClientVehicleStatus = eVehicleStatus.InRepair;
         }
 

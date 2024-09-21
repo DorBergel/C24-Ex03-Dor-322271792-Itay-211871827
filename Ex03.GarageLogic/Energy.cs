@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
     public abstract class Energy
     {
         private float m_CurrentEnergy;
-        private readonly float m_MaxEnergy;
+        private float m_MaxEnergy;
         
         public Energy(float i_CurrentEnergy,  float i_MaxEnergy)
         {

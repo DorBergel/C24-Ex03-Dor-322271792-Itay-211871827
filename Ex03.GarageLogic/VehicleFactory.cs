@@ -36,8 +36,9 @@ namespace Ex03.GarageLogic
                     break;
 
                 case eVehicleType.Truck:
-                    newVehicle = new Truck(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, 
-                        Boolean.Parse(i_ExtraProperties["IsIncludeHazardousMaterials"]), float.Parse(i_ExtraProperties["LuggageVolume"]));
+                    bool hazardousMaterials = i_ExtraProperties["IsIncludeHazardousMaterials"] == "Yes" ? true : false;
+                    newVehicle = new Truck(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy,
+                        hazardousMaterials, float.Parse(i_ExtraProperties["LuggageVolume"]));
                     break;
             }
 

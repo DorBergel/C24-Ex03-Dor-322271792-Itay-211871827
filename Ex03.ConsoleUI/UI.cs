@@ -128,7 +128,7 @@ namespace Ex03.ConsoleUI
                     Console.WriteLine(messageInList.ToString());
                     Console.WriteLine("Enter the digit (between 1 to {0}) of your desired selection", i_OptionsToList.Length);
                     userDigitInput = Console.ReadLine();
-                    Console.WriteLine(Environment.NewLine);
+                    Console.Write(Environment.NewLine);
                     isValidInput = checkIfDigitInRange(userDigitInput, i_OptionsToList.Length);
                 }
                 catch (FormatException formatException)
@@ -181,7 +181,7 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine(i_InstructionsToInput);
                     userInput = Console.ReadLine();
-                    Console.WriteLine(Environment.NewLine);
+                    Console.Write(Environment.NewLine);
                     isValidInput = checkIsValidInput<T>(userInput);
                 }
                 catch (FormatException formatException)
@@ -249,7 +249,7 @@ namespace Ex03.ConsoleUI
 
                 string stringVehicleType = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleType)), "Please choose your vehicle's type.");
                 eVehicleType vehicleType = (eVehicleType)Enum.Parse(typeof(eVehicleType), stringVehicleType);
-                string vehicleCurrentVendor = GetUserInput<string>("Please enter your car vendor: ");
+                string vehicleCurrentVendor = GetUserInput<string>("Please enter your vehicle vendor: ");
                 string wheelCurrentVendor = GetUserInput<string>("Please enter your wheels vendor: ");
 
                 switch (vehicleType)
@@ -301,7 +301,7 @@ namespace Ex03.ConsoleUI
                         newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.RegularMotorcycle,
                             vehicleCurrentVendor,
                             vehicleLicensePlate,
-                            5,
+                            2,
                             vehicleWheel,
                             vehicleFuel,
                             extraProperties);
@@ -316,10 +316,10 @@ namespace Ex03.ConsoleUI
                         extraProperties.Add("LicenseType", licenseType);
                         extraProperties.Add("EngineVolume", engineVolume);
 
-                        newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.ElectricCar,
+                        newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.ElectricMotorcycle,
                             vehicleCurrentVendor,
                             vehicleLicensePlate,
-                            5,
+                            2,
                             vehicleWheel,
                             vehicleElectric,
                             extraProperties);
@@ -349,7 +349,7 @@ namespace Ex03.ConsoleUI
                 m_Garage.AddNewClient(ownerName, ownerPhoneNumber, newClientVehicle);
                 if (m_Garage.IsVehicleExists(vehicleLicensePlate))
                 {
-                    Console.WriteLine("Inserting vehicle with license plate {0} completed!");
+                    Console.WriteLine("Inserting vehicle with license plate {0} completed!", vehicleLicensePlate);
                 }
             }
         }
@@ -460,7 +460,7 @@ namespace Ex03.ConsoleUI
                 eVehicleStatus newVehicleStatus = (eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), choiceOfStatus);
                 m_Garage.ChangeVehicleStatus(vehicleLicensePlate, newVehicleStatus);
                 Thread.Sleep(1000);
-                Console.WriteLine("The status of vehicle with license plate {0} successfully changed to {1}.");
+                Console.WriteLine("The status of vehicle with license plate {0} successfully changed to {1}.", vehicleLicensePlate, newVehicleStatus.ToString());
             }
             else
             {
@@ -489,28 +489,41 @@ namespace Ex03.ConsoleUI
         public void RefillRegularVehicle()
         {
             bool isCompleted = false;
-            
+            string choiceOfFuelType = null;
+
+
             Console.Clear();
             Console.WriteLine("You chose to fill fuel to a regular vehicle. Follow the instructions.");
             string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
             if (m_Garage.IsVehicleExists(vehicleLicensePlate))
             {
+                string instructionsMsg = String.Format("Please choose fuel type of vehicle with license plate: {0}", vehicleLicensePlate);
                 do
                 {
                     try
                     {
-                        string instructionsMsg = String.Format("Please chose fuel type of vehicle with license plate: {0}", vehicleLicensePlate);
-                        string choiceOfFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)), instructionsMsg);
-                        string choiceOfFuelAmount = GetUserInput<float>("Enter amount of fuel that you would like to fill (in liters):");
+                        choiceOfFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)), instructionsMsg);
+                        isCompleted = (m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource as Fuel).CheckIfFuelTypeMatch((eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType));
+                    }
+                    catch (ArgumentException argumentException)
+                    {
+                        Console.WriteLine(argumentException.Message);
+                    }
+                } while (!isCompleted);
+
+                isCompleted = false;
+                string rangeToFill = $"Range [0, " +
+                    $"{m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.MaxEnergy - m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy}]";
+                do
+                {
+                    try
+                    {
+                        string choiceOfFuelAmount = GetUserInput<float>($"Enter amount of fuel that you would like to fill (in liters) - {rangeToFill}:");
                         m_Garage.RefillRegularVehicle(vehicleLicensePlate, (eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType), float.Parse(choiceOfFuelAmount));
                         Thread.Sleep(1000);
                         Console.WriteLine("Filling fuel for the vehicle with license plate {0} completed! The current amount of fuel is {1} liters",
                             vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy);
                         isCompleted = true;
-                    }
-                    catch (ArgumentException arguemntException)
-                    {
-                        Console.WriteLine(arguemntException.Message);
                     }
                     catch (ValueOutOfRangeException outOfRangeException)
                     {
@@ -537,7 +550,7 @@ namespace Ex03.ConsoleUI
                 {
                     try
                     {
-                        string choiceOfMinutesToCharge = GetUserInput<float>("Enter the number of minutes you wolud like to charge the vehicle:");
+                        string choiceOfMinutesToCharge = GetUserInput<float>("Enter the number of minutes you would like to charge the vehicle:");
                         m_Garage.RefillElectricVehicle(vehicleLicensePlate, int.Parse(choiceOfMinutesToCharge));
                         Thread.Sleep(1000);
                         Console.WriteLine("Charging the vehicle with license plate {0} completed! The current battery is {1} hours",
