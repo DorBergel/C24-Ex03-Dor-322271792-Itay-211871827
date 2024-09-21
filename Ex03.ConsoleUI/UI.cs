@@ -107,7 +107,7 @@ namespace Ex03.ConsoleUI
             Console.WriteLine(optionMenuMsg);
         }
 
-        public string ChooseFromListOfOptions(string[] i_OptionsToList)
+        public string ChooseFromListOfOptions(string[] i_OptionsToList, string i_Instructions)
         {
             string userDigitInput = null;
             int intUserDigitInput;
@@ -123,9 +123,12 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    Console.WriteLine("Enter the digit (between 1 to {0}) of your desired selection", i_OptionsToList.Length);
+                    Console.WriteLine(i_Instructions);
+                    Console.WriteLine("Below is the list of options:");
                     Console.WriteLine(messageInList.ToString());
+                    Console.WriteLine("Enter the digit (between 1 to {0}) of your desired selection", i_OptionsToList.Length);
                     userDigitInput = Console.ReadLine();
+                    Console.WriteLine(Environment.NewLine);
                     isValidInput = checkIfDigitInRange(userDigitInput, i_OptionsToList.Length);
                 }
                 catch (FormatException formatException)
@@ -178,6 +181,7 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine(i_InstructionsToInput);
                     userInput = Console.ReadLine();
+                    Console.WriteLine(Environment.NewLine);
                     isValidInput = checkIsValidInput<T>(userInput);
                 }
                 catch (FormatException formatException)
@@ -231,28 +235,30 @@ namespace Ex03.ConsoleUI
             string vehicleLicensePlate = GetUserInput<string>("Please enter your license plate: ");
             if (m_Garage.IsVehicleExists(vehicleLicensePlate))
             {
-                Console.WriteLine("The vehicle is already in the garage.");
+                Console.WriteLine("The vehicle is already in the garage. Your vehicle's status in the garage is {0}", eVehicleStatus.InRepair);
                 m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].VehicleStatus = eVehicleStatus.InRepair;
             }
             else
             {
                 string ownerName, ownerPhoneNumber;
                 Vehicle newClientVehicle = null;
+                Wheel vehicleWheel = null;
+                Fuel vehicleFuel = null;
+                Electric vehicleElectric = null;
                 Dictionary<string, string> extraProperties = new Dictionary<string, string>();
 
-                string stringVehicleType = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleType)));
+                string stringVehicleType = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleType)), "Please choose your vehicle's type.");
                 eVehicleType vehicleType = (eVehicleType)Enum.Parse(typeof(eVehicleType), stringVehicleType);
-                
                 string vehicleCurrentVendor = GetUserInput<string>("Please enter your car vendor: ");
                 string wheelCurrentVendor = GetUserInput<string>("Please enter your wheels vendor: ");
-                string wheelCurrentPressure = GetUserInput<float>("Please enter your wheels pressure: ");
 
                 switch (vehicleType)
                 {
                     case eVehicleType.RegularCar:
-                        string fuelCurrent = GetUserInput<float>("Please enter your current fuel status: ");
-                        string carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)));
-                        string numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)));
+                        vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 33f);
+                        vehicleFuel = createFuelEngine("Please enter your current fuel status: ", 49f, eFuelType.Octan95);
+                        string carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)), "Please choose the color of your car.");
+                        string numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)), "Please choose the number of doors in your car.");
                         extraProperties.Add("CarColor", carColor);
                         extraProperties.Add("NumOfDoors", numOfDoors);
 
@@ -260,16 +266,17 @@ namespace Ex03.ConsoleUI
                             vehicleCurrentVendor,
                             vehicleLicensePlate,
                             5,
-                            new Wheel(wheelCurrentVendor, float.Parse(wheelCurrentPressure), 33f),
-                            new Fuel(float.Parse(fuelCurrent), 49f, eFuelType.Octan95),
+                            vehicleWheel,
+                            vehicleFuel,
                             extraProperties);
         
                         break;
 
                     case eVehicleType.ElectricCar:
-                        string batteryCurrent = GetUserInput<float>("Please enter your current battery status: ");
-                        carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)));
-                        numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)));
+                        vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 33f);
+                        vehicleElectric = createElectricEngine("Please enter your current battery status: ", 5f);
+                        carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)), "Please choose the color of your car.");
+                        numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)), "Please choose the number of doors in your car.");
                         extraProperties.Add("CarColor", carColor);
                         extraProperties.Add("NumOfDoors", numOfDoors);
 
@@ -277,15 +284,16 @@ namespace Ex03.ConsoleUI
                             vehicleCurrentVendor,
                             vehicleLicensePlate,
                             5,
-                            new Wheel(wheelCurrentVendor, float.Parse(wheelCurrentPressure), 33f),
-                            new Electric(float.Parse(batteryCurrent), 5f),
+                            vehicleWheel,
+                            vehicleElectric,
                             extraProperties);
 
                         break;
 
                     case eVehicleType.RegularMotorcycle:
-                        fuelCurrent = GetUserInput<float>("Please enter your current fuel status: ");
-                        string licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)));
+                        vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 31f);
+                        vehicleFuel = createFuelEngine("Please enter your current fuel status: ", 6f, eFuelType.Octan98);
+                        string licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eLicenseType)), "Please choose type of the license.");
                         string engineVolume = GetUserInput<int>("Please enter your engine volume: ");
                         extraProperties.Add("LicenseType", licenseType);
                         extraProperties.Add("EngineVolume", engineVolume);
@@ -294,15 +302,16 @@ namespace Ex03.ConsoleUI
                             vehicleCurrentVendor,
                             vehicleLicensePlate,
                             5,
-                            new Wheel(wheelCurrentVendor, float.Parse(wheelCurrentPressure), 31f),
-                            new Fuel(float.Parse(fuelCurrent), 6f, eFuelType.Octan98),
+                            vehicleWheel,
+                            vehicleFuel,
                             extraProperties);
 
                         break;
 
                     case eVehicleType.ElectricMotorcycle:
-                        batteryCurrent = GetUserInput<float>("Please enter your current battery status: ");
-                        licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)));
+                        vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 31f);
+                        vehicleElectric = createElectricEngine("Please enter your current battery status: ", 2.7f);
+                        licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eLicenseType)), "Please choose type of the license.");
                         engineVolume = GetUserInput<int>("Please enter your engine volume: ");
                         extraProperties.Add("LicenseType", licenseType);
                         extraProperties.Add("EngineVolume", engineVolume);
@@ -311,15 +320,16 @@ namespace Ex03.ConsoleUI
                             vehicleCurrentVendor,
                             vehicleLicensePlate,
                             5,
-                            new Wheel(wheelCurrentVendor, float.Parse(wheelCurrentPressure), 31f),
-                            new Electric(float.Parse(batteryCurrent), 2.7f),
+                            vehicleWheel,
+                            vehicleElectric,
                             extraProperties);
                         break;
 
                     case eVehicleType.Truck:
-                        fuelCurrent = GetUserInput<float>("Please enter your current fuel status: ");
+                        vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 28f);
+                        vehicleFuel = createFuelEngine("Please enter your current fuel status: ", 130f, eFuelType.Soler);
                         string[] boolArr = new string[2] {"Yes", "No"};
-                        string isIncludeHazrdousMaterials = ChooseFromListOfOptions(boolArr);
+                        string isIncludeHazrdousMaterials = ChooseFromListOfOptions(boolArr, "Is the truck transporting hazardous materials?");
                         string luggageVolume = GetUserInput<float>("Please enter your luggage volume: ");
                         extraProperties.Add("IsIncludeHazardousMaterials", isIncludeHazrdousMaterials);
                         extraProperties.Add("LuggageVolume", luggageVolume);
@@ -328,8 +338,8 @@ namespace Ex03.ConsoleUI
                             vehicleCurrentVendor,
                             vehicleLicensePlate,
                             14,
-                            new Wheel(wheelCurrentVendor, float.Parse(wheelCurrentPressure), 28f),
-                            new Fuel(float.Parse(fuelCurrent), 130f, eFuelType.Soler),
+                            vehicleWheel,
+                            vehicleFuel,
                             extraProperties);
                         break;
                 }
@@ -344,6 +354,72 @@ namespace Ex03.ConsoleUI
             }
         }
 
+        private Wheel createWheel(string i_Instructions, string i_WheelVendor, float i_MaxAirPressure)
+        {
+            Wheel wheel = null;
+            bool isValid = false;
+            
+            do
+            {
+                try
+                {
+                    string userInput = GetUserInput<float>(i_Instructions);
+                    wheel = new Wheel(i_WheelVendor, float.Parse(userInput), i_MaxAirPressure);
+                    isValid = true;
+                }
+                catch (ValueOutOfRangeException outOfRangeException)
+                {
+                    Console.WriteLine(outOfRangeException.Message);
+                }
+            } while (!isValid);
+
+            return wheel;
+        }
+
+        private Fuel createFuelEngine(string i_Instructions, float i_MaxFuel, eFuelType i_FuelType)
+        {
+            Fuel fuelEngine = null;
+            bool isValid = false;
+
+            do
+            {
+                try
+                {
+                    string currentFuel = GetUserInput<float>(i_Instructions);
+                    fuelEngine = new Fuel(float.Parse(currentFuel), i_MaxFuel, i_FuelType);
+                    isValid = true;
+                }
+                catch (ValueOutOfRangeException outOfRangeException)
+                {
+                    Console.WriteLine(outOfRangeException.Message);
+                }
+            } while (!isValid);
+
+            return fuelEngine;
+        }
+
+        private Electric createElectricEngine(string i_Instructions, float i_MaxBattery)
+        {
+            Electric elecrticEngine = null;
+            bool isValid = false;
+
+            do
+            {
+                try
+                {
+                    string currentBattery = GetUserInput<float>(i_Instructions);
+                    elecrticEngine = new Electric(float.Parse(currentBattery), i_MaxBattery);
+                    isValid = true;
+                }
+                catch (ValueOutOfRangeException outOfRangeException)
+                {
+                    Console.WriteLine(outOfRangeException.Message);
+                }
+            } while (!isValid);
+
+            return elecrticEngine;
+        }
+
         public void ShowLicensePlatesList()
         {
             List<string> licensePlatesList;
@@ -356,8 +432,8 @@ namespace Ex03.ConsoleUI
             Console.Clear();
             if (m_Garage.GarageClients.Count > 0)
             {
-                Console.WriteLine("You chose to see list of license plates in the garage. Please enter the type of filter you would like to perform.");
-                string userChoice = ChooseFromListOfOptions(vehicleStatusFilter);
+                Console.WriteLine("You chose to see list of license plates in the garage. Follow the instructions.");
+                string userChoice = ChooseFromListOfOptions(vehicleStatusFilter, "Please select the desired filter type. If you don't want to filter, select 4.");
                 licensePlatesList = userChoice == "None" ? m_Garage.GetLicensePlatesList() :
                     m_Garage.GetLicensePlatesList((eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), userChoice));
                 Console.WriteLine(Environment.NewLine);
@@ -379,8 +455,8 @@ namespace Ex03.ConsoleUI
             string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
             if (m_Garage.IsVehicleExists(vehicleLicensePlate))
             {
-                Console.WriteLine("Please chose new status of vehicle with license plate: {0}", vehicleLicensePlate);
-                string choiceOfStatus = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleStatus)));
+                string instructionsMsg = String.Format("Please chose new status of vehicle with license plate: {0}", vehicleLicensePlate);
+                string choiceOfStatus = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleStatus)), instructionsMsg);
                 eVehicleStatus newVehicleStatus = (eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), choiceOfStatus);
                 m_Garage.ChangeVehicleStatus(vehicleLicensePlate, newVehicleStatus);
                 Thread.Sleep(1000);
@@ -423,8 +499,8 @@ namespace Ex03.ConsoleUI
                 {
                     try
                     {
-                        Console.WriteLine("Please chose fuel type of vehicle with license plate: {0}", vehicleLicensePlate);
-                        string choiceOfFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)));
+                        string instructionsMsg = String.Format("Please chose fuel type of vehicle with license plate: {0}", vehicleLicensePlate);
+                        string choiceOfFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)), instructionsMsg);
                         string choiceOfFuelAmount = GetUserInput<float>("Enter amount of fuel that you would like to fill (in liters):");
                         m_Garage.RefillRegularVehicle(vehicleLicensePlate, (eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType), float.Parse(choiceOfFuelAmount));
                         Thread.Sleep(1000);
