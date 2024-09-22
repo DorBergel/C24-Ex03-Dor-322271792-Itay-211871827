@@ -40,7 +40,7 @@ namespace Ex03.ConsoleUI
             int numOfUserChoice = -1;
             bool isValidChoice = false;
 
-            InitOptionsMenu();
+            InitMainMenu();
             do
             {
                 try
@@ -93,7 +93,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public void InitOptionsMenu()
+        public void InitMainMenu()
         {
             string optionMenuMsg =
                 String.Format("Here are the actions you can perform:" + Environment.NewLine

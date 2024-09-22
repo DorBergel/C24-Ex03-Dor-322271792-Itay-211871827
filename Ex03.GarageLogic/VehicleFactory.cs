@@ -8,43 +8,6 @@ namespace Ex03.GarageLogic
 {
     public static class VehicleFactory
     {
-        /*public static Vehicle CreateVehicle(eVehicleType i_VehicleType, string i_VehicleVendor, string i_LicensePlate, int i_NumOfWheels, Wheel i_VehicleWheel, 
-            Energy i_VehicleEnergy, Dictionary<string, string> i_ExtraProperties)
-        {
-            Vehicle newVehicle = null;
-
-            switch (i_VehicleType)
-            {
-                case eVehicleType.RegularMotorcycle:
-                    newVehicle = new Motorcycle(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, 
-                        (eMotorcycleLicenseType)Enum.Parse(typeof(eMotorcycleLicenseType), i_ExtraProperties["LicenseType"]), int.Parse(i_ExtraProperties["EngineVolume"]));
-                    break;
-
-                case eVehicleType.ElectricMotorcycle:
-                    newVehicle = new Motorcycle(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, 
-                        (eMotorcycleLicenseType)Enum.Parse(typeof(eMotorcycleLicenseType), i_ExtraProperties["LicenseType"]), int.Parse(i_ExtraProperties["EngineVolume"]));
-                    break;
-
-                case eVehicleType.RegularCar:
-                    newVehicle = new Car(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, 
-                        (eCarColor)Enum.Parse(typeof(eCarColor), i_ExtraProperties["CarColor"]), (eNumOfCarDoors)Enum.Parse(typeof(eNumOfCarDoors), i_ExtraProperties["NumOfDoors"]));
-                    break;
-
-                case eVehicleType.ElectricCar:
-                    newVehicle = new Car(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, 
-                        (eCarColor)Enum.Parse(typeof(eCarColor), i_ExtraProperties["CarColor"]), (eNumOfCarDoors)Enum.Parse(typeof(eNumOfCarDoors), i_ExtraProperties["NumOfDoors"]));
-                    break;
-
-                case eVehicleType.Truck:
-                    bool hazardousMaterials = i_ExtraProperties["IsIncludeHazardousMaterials"] == "Yes" ? true : false;
-                    newVehicle = new Truck(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy,
-                        hazardousMaterials, float.Parse(i_ExtraProperties["LuggageVolume"]));
-                    break;
-            }
-
-            return newVehicle;
-        }*/
-
         public static Vehicle CreateVehicle(eVehicleType i_VehicleType, string i_LicensePlate)
         {
             Vehicle vehicle = null;
