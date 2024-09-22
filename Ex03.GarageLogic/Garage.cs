@@ -112,7 +112,7 @@ namespace Ex03.GarageLogic
 
         public void RefillElectricVehicle(string i_LicensePlate, int i_RequiredMinutesToRefill)
         {
-            float requiredHoursToRefill = i_RequiredMinutesToRefill / 60;
+            float requiredHoursToRefill = (float)i_RequiredMinutesToRefill / 60;
             m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(requiredHoursToRefill);
         }
 

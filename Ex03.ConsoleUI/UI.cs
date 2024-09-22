@@ -525,7 +525,7 @@ namespace Ex03.ConsoleUI
             {
                 if (isVehicleMatchToEnergySource(vehicleLicensePlate, eEngineType.Electric))
                 {
-                    int maxMinutesToRefill = (int)(m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.MaxEnergyToRefill()) * 60;
+                    int maxMinutesToRefill = (int)(m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.MaxEnergyToRefill() * 60);
                     if (maxMinutesToRefill > 0)
                     {
                         do
