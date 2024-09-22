@@ -249,7 +249,7 @@ namespace Ex03.ConsoleUI
 
                 string stringVehicleType = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleType)), "Please choose your vehicle's type.");
                 eVehicleType vehicleType = (eVehicleType)Enum.Parse(typeof(eVehicleType), stringVehicleType);
-                string vehicleCurrentVendor = GetUserInput<string>("Please enter your vehicle vendor: ");
+                string vehicleVendor = GetUserInput<string>("Please enter your vehicle vendor: ");
                 string wheelCurrentVendor = GetUserInput<string>("Please enter your wheels vendor: ");
 
                 switch (vehicleType)
@@ -263,7 +263,7 @@ namespace Ex03.ConsoleUI
                         extraProperties.Add("NumOfDoors", numOfDoors);
 
                         newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.RegularCar,
-                            vehicleCurrentVendor,
+                            vehicleVendor,
                             vehicleLicensePlate,
                             5,
                             vehicleWheel,
@@ -281,7 +281,7 @@ namespace Ex03.ConsoleUI
                         extraProperties.Add("NumOfDoors", numOfDoors);
 
                         newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.ElectricCar,
-                            vehicleCurrentVendor,
+                            vehicleVendor,
                             vehicleLicensePlate,
                             5,
                             vehicleWheel,
@@ -299,7 +299,7 @@ namespace Ex03.ConsoleUI
                         extraProperties.Add("EngineVolume", engineVolume);
 
                         newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.RegularMotorcycle,
-                            vehicleCurrentVendor,
+                            vehicleVendor,
                             vehicleLicensePlate,
                             2,
                             vehicleWheel,
@@ -317,7 +317,7 @@ namespace Ex03.ConsoleUI
                         extraProperties.Add("EngineVolume", engineVolume);
 
                         newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.ElectricMotorcycle,
-                            vehicleCurrentVendor,
+                            vehicleVendor,
                             vehicleLicensePlate,
                             2,
                             vehicleWheel,
@@ -335,7 +335,7 @@ namespace Ex03.ConsoleUI
                         extraProperties.Add("LuggageVolume", luggageVolume);
 
                         newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.Truck,
-                            vehicleCurrentVendor,
+                            vehicleVendor,
                             vehicleLicensePlate,
                             14,
                             vehicleWheel,
@@ -436,7 +436,7 @@ namespace Ex03.ConsoleUI
                 string userChoice = ChooseFromListOfOptions(vehicleStatusFilter, "Please select the desired filter type. If you don't want to filter, select 4.");
                 licensePlatesList = userChoice == "None" ? m_Garage.GetLicensePlatesList() :
                     m_Garage.GetLicensePlatesList((eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), userChoice));
-                Console.WriteLine(Environment.NewLine);
+                Console.Write(Environment.NewLine);
                 foreach (string licensePlate in licensePlatesList)
                 {
                     Console.WriteLine(licensePlate);

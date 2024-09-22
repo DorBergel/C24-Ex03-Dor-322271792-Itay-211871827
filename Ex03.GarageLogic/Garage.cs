@@ -28,10 +28,10 @@ namespace Ex03.GarageLogic
             return m_GarageClients != null && m_GarageClients.ContainsKey(i_LicensePlateNumber.GetHashCode());
         }
         
-        // Need to think if calling the factory from UI or by the the garage
-        public void AddNewClient(string i_ClientName, string i_ClientPhoneNumber, Vehicle i_ClientVehilce)
+        // Need to think if calling the factory from UI or from the the garage
+        public void AddNewClient(string i_ClientName, string i_ClientPhoneNumber, Vehicle i_ClientVehicle)
         {
-            GarageClient newGarageClient = new GarageClient(i_ClientName, i_ClientPhoneNumber, i_ClientVehilce);
+            GarageClient newGarageClient = new GarageClient(i_ClientName, i_ClientPhoneNumber, i_ClientVehicle);
             m_GarageClients.Add(newGarageClient.GetHashCode(), newGarageClient);
         }
 

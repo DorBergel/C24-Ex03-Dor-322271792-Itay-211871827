@@ -36,7 +36,7 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            string output = String.Format("{0}{1}" +
+            string output = String.Format("{0}" +
                 "{2}{1}" +
                 "Luggage volume: {3}{1}",
                 base.ToString(), Environment.NewLine, 

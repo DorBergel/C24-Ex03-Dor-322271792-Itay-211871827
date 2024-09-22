@@ -98,7 +98,7 @@ namespace Ex03.GarageLogic
             output = String.Format("License plate: {0}{1}" +
                 "Vehicle's vendor: {2}{1}" +
                 "{3}{1}" +
-                "{4}{1}",
+                "{4}",
                 m_LicensePlate, Environment.NewLine, m_VehicleVendor, 
                 m_VehicleEnergySource.ToString(), wheelsDetails.ToString());
 
