@@ -28,11 +28,9 @@ namespace Ex03.GarageLogic
             return m_GarageClients != null && m_GarageClients.ContainsKey(i_LicensePlateNumber.GetHashCode());
         }
 
-        public void AddNewClient(string i_ClientName, string i_ClientPhoneNumber, eVehicleType i_VehicleType, string i_VehicleVendor,
-            string i_VehicleLicensePlate, int i_NumOfWheels, Wheel i_VehicleWheel, Energy i_VehicleEnergy, Dictionary<string, string> i_ExtraProperties)
+        public void AddNewClient(string i_ClientName, string i_ClientPhoneNumber, Vehicle i_ClientVehicle)
         {
-            Vehicle clientVehicle = VehicleFactory.CreateVehicle(i_VehicleType, i_VehicleVendor, i_VehicleLicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, i_ExtraProperties);
-            GarageClient newGarageClient = new GarageClient(i_ClientName, i_ClientPhoneNumber, clientVehicle);
+            GarageClient newGarageClient = new GarageClient(i_ClientName, i_ClientPhoneNumber, i_ClientVehicle);
             m_GarageClients.Add(newGarageClient.GetHashCode(), newGarageClient);
         }
 
@@ -116,6 +114,36 @@ namespace Ex03.GarageLogic
         {
             float requiredHoursToRefill = i_RequiredMinutesToRefill / 60;
             m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.Refill(requiredHoursToRefill);
+        }
+
+        public bool IsEngineTypeMatchToRequiredType(string i_LicensePlate, eEngineType i_RequiredVehicleType)
+        {
+            bool isMatch = false;
+            
+            if (m_GarageClients[i_LicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource is Fuel)
+            {
+                if (i_RequiredVehicleType == eEngineType.Fuel)
+                {
+                    isMatch = true;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: your vehicle's engine based on fuel, but the action not relevant to that kind of vehicles.");
+                }
+            }
+            else
+            {
+                if (i_RequiredVehicleType == eEngineType.Electric)
+                {
+                    isMatch = true;
+                }
+                else
+                {
+                    throw new ArgumentException("Error: your vehicle's engine based on electricity, but the action not relevant to that kind of vehicles.");
+                }
+            }
+
+            return isMatch;
         }
 
         // Check before submission

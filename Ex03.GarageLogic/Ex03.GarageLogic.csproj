@@ -44,7 +44,7 @@
     <Compile Include="eEngineType.cs" />
     <Compile Include="eFuelType.cs" />
     <Compile Include="Electric.cs" />
-    <Compile Include="eLicenseType.cs" />
+    <Compile Include="eMotorcycleLicenseType.cs" />
     <Compile Include="Energy.cs" />
     <Compile Include="eNumOfCarDoors.cs" />
     <Compile Include="eVehicleStatus.cs" />

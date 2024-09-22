@@ -10,7 +10,7 @@ namespace Ex03.GarageLogic
     {
         Blue = 1,
         White,
-        Red,
-        Black
+        Black,
+        Red
     }
 }

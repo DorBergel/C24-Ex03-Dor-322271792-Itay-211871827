@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public enum eLicenseType
+    public enum eMotorcycleLicenseType
     {
         A1,
         A2,

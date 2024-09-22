@@ -13,19 +13,24 @@ namespace Ex03.GarageLogic
         private Energy m_VehicleEnergySource;
         private List<Wheel> m_WheelsCollection;
 
+        public Vehicle(string i_LicensePlate)
+        {
+            m_LicensePlate = i_LicensePlate;
+        }
+        
         public Vehicle(string i_VehicleVendor, string i_LicensePlate, int i_NumOfWheels, Wheel i_VehicleWheel, Energy i_VehicleEnergy)
         {
             m_VehicleVendor = i_VehicleVendor;
             m_LicensePlate = i_LicensePlate;
-            
+            m_VehicleEnergySource = i_VehicleEnergy;
             m_WheelsCollection = new List<Wheel>();
             for (int i = 1; i <= i_NumOfWheels; i++)
             {
                 m_WheelsCollection.Add(i_VehicleWheel);
             }
-
-            m_VehicleEnergySource = i_VehicleEnergy;
         }
+
+        public abstract void InitVehicleData(string i_VehicleVendor, int i_NumOfWheels, Wheel i_VehicleWheel, Energy i_VehicleEnergy, Dictionary<string, string> i_ExtraProperties);
 
         public string VehicleVendor
         {

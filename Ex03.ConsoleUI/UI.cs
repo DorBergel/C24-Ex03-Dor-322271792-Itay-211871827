@@ -242,21 +242,22 @@ namespace Ex03.ConsoleUI
             {
                 string ownerName, ownerPhoneNumber;
                 int numOfWheels = 0;
+                Vehicle clientVehicle = null;
                 Wheel vehicleWheel = null;
                 Energy vehicleEnergy = null;
                 Dictionary<string, string> extraProperties = new Dictionary<string, string>();
 
                 string stringVehicleType = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleType)), "Please choose your vehicle's type.");
                 eVehicleType vehicleType = (eVehicleType)Enum.Parse(typeof(eVehicleType), stringVehicleType);
+                clientVehicle = VehicleFactory.CreateVehicle(vehicleType, vehicleLicensePlate);
                 string vehicleVendor = GetUserInput<string>("Please enter your vehicle vendor: ");
                 string wheelCurrentVendor = GetUserInput<string>("Please enter your wheels vendor: ");
-
                 switch (vehicleType)
                 {
                     case eVehicleType.RegularCar:
-                        vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 33f);
+                        vehicleWheel = createWheel("Please enter the current air pressure of all wheels: ", wheelCurrentVendor, 33f);
                         numOfWheels = 5;
-                        vehicleEnergy = createFuelEngine("Please enter your current fuel status: ", 49f, eFuelType.Octan95);
+                        vehicleEnergy = createFuelEngine("Please enter your current amount of fuel (in liters): ", 49f, eFuelType.Octan95);
                         string carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)), "Please choose the color of your car.");
                         string numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)), "Please choose the number of doors in your car.");
                         extraProperties.Add("CarColor", carColor);
@@ -266,7 +267,7 @@ namespace Ex03.ConsoleUI
                     case eVehicleType.ElectricCar:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 33f);
                         numOfWheels = 5;
-                        vehicleEnergy = createElectricEngine("Please enter your current battery status: ", 5f);
+                        vehicleEnergy = createElectricEngine("Please enter your current battery status (in hours): ", 5f);
                         carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)), "Please choose the color of your car.");
                         numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)), "Please choose the number of doors in your car.");
                         extraProperties.Add("CarColor", carColor);
@@ -276,8 +277,8 @@ namespace Ex03.ConsoleUI
                     case eVehicleType.RegularMotorcycle:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 31f);
                         numOfWheels = 2;
-                        vehicleEnergy = createFuelEngine("Please enter your current fuel status: ", 6f, eFuelType.Octan98);
-                        string licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eLicenseType)), "Please choose type of the license.");
+                        vehicleEnergy = createFuelEngine("Please enter your current amount of fuel (in liters): ", 6f, eFuelType.Octan98);
+                        string licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eMotorcycleLicenseType)), "Please choose type of the license.");
                         string engineVolume = GetUserInput<int>("Please enter your engine volume: ");
                         extraProperties.Add("LicenseType", licenseType);
                         extraProperties.Add("EngineVolume", engineVolume);
@@ -286,8 +287,8 @@ namespace Ex03.ConsoleUI
                     case eVehicleType.ElectricMotorcycle:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 31f);
                         numOfWheels = 2;
-                        vehicleEnergy = createElectricEngine("Please enter your current battery status: ", 2.7f);
-                        licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eLicenseType)), "Please choose type of the license.");
+                        vehicleEnergy = createElectricEngine("Please enter your current battery status (in hours): ", 2.7f);
+                        licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eMotorcycleLicenseType)), "Please choose type of the license.");
                         engineVolume = GetUserInput<int>("Please enter your engine volume: ");
                         extraProperties.Add("LicenseType", licenseType);
                         extraProperties.Add("EngineVolume", engineVolume);
@@ -296,7 +297,7 @@ namespace Ex03.ConsoleUI
                     case eVehicleType.Truck:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 28f);
                         numOfWheels = 14;
-                        vehicleEnergy = createFuelEngine("Please enter your current fuel status: ", 130f, eFuelType.Soler);
+                        vehicleEnergy = createFuelEngine("Please enter your current amount of fuel (in liters): ", 130f, eFuelType.Soler);
                         string[] boolArr = new string[2] { "Yes", "No" };
                         string isIncludeHazrdousMaterials = ChooseFromListOfOptions(boolArr, "Is the truck transporting hazardous materials?");
                         string luggageVolume = GetUserInput<float>("Please enter your luggage volume: ");
@@ -305,9 +306,10 @@ namespace Ex03.ConsoleUI
                         break;
                 }
 
+                clientVehicle.InitVehicleData(vehicleVendor, numOfWheels, vehicleWheel, vehicleEnergy, extraProperties);
                 ownerName = GetUserInput<string>("Please enter your name");
                 ownerPhoneNumber = GetUserInput<int>("Please enter your phone number");
-                m_Garage.AddNewClient(ownerName, ownerPhoneNumber, vehicleType, vehicleVendor, vehicleLicensePlate, numOfWheels, vehicleWheel, vehicleEnergy, extraProperties);
+                m_Garage.AddNewClient(ownerName, ownerPhoneNumber, clientVehicle);
                 if (m_Garage.IsVehicleExists(vehicleLicensePlate))
                 {
                     Console.WriteLine("Inserting vehicle with license plate {0} completed!", vehicleLicensePlate);
@@ -397,10 +399,16 @@ namespace Ex03.ConsoleUI
                 string userChoice = ChooseFromListOfOptions(vehicleStatusFilter, "Please select the desired filter type. If you don't want to filter, select 4.");
                 licensePlatesList = userChoice == "None" ? m_Garage.GetLicensePlatesList() :
                     m_Garage.GetLicensePlatesList((eVehicleStatus)Enum.Parse(typeof(eVehicleStatus), userChoice));
-                Console.Write(Environment.NewLine);
-                foreach (string licensePlate in licensePlatesList)
+                if (licensePlatesList.Count > 0)
                 {
-                    Console.WriteLine(licensePlate);
+                    foreach (string licensePlate in licensePlatesList)
+                    {
+                        Console.WriteLine(licensePlate);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("There are no vehicles in the garage with the status that you chose ({0})", userChoice);
                 }
             }
             else
@@ -452,45 +460,53 @@ namespace Ex03.ConsoleUI
             bool isCompleted = false;
             string choiceOfFuelType = null;
 
-
             Console.Clear();
             Console.WriteLine("You chose to fill fuel to a regular vehicle. Follow the instructions.");
             string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
             if (m_Garage.IsVehicleExists(vehicleLicensePlate))
             {
-                string instructionsMsg = String.Format("Please choose fuel type of vehicle with license plate: {0}", vehicleLicensePlate);
-                do
+                if (isVehicleMatchToEnergySource(vehicleLicensePlate, eEngineType.Fuel))
                 {
-                    try
+                    string instructionsMsg = String.Format("Please choose fuel type of vehicle with license plate: {0}", vehicleLicensePlate);
+                    do
                     {
-                        choiceOfFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)), instructionsMsg);
-                        isCompleted = (m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource as Fuel).CheckIfFuelTypeMatch((eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType));
-                    }
-                    catch (ArgumentException argumentException)
-                    {
-                        Console.WriteLine(argumentException.Message);
-                    }
-                } while (!isCompleted);
+                        try
+                        {
+                            choiceOfFuelType = ChooseFromListOfOptions(Enum.GetNames(typeof(eFuelType)), instructionsMsg);
+                            isCompleted = (m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource as Fuel).CheckIfFuelTypeMatch((eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType));
+                        }
+                        catch (ArgumentException argumentException)
+                        {
+                            Console.WriteLine(argumentException.Message);
+                        }
+                    } while (!isCompleted);
 
-                isCompleted = false;
-                string rangeToFill = $"Range [0, " +
-                    $"{m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.MaxEnergy - m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy}]";
-                do
-                {
-                    try
+                    isCompleted = false;
+                    string rangeToFill = $"Range [0, {m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.MaxEnergyToRefill()}]";
+                    if (m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.MaxEnergyToRefill() > 0)
                     {
-                        string choiceOfFuelAmount = GetUserInput<float>($"Enter amount of fuel that you would like to fill (in liters) - {rangeToFill}:");
-                        m_Garage.RefillRegularVehicle(vehicleLicensePlate, (eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType), float.Parse(choiceOfFuelAmount));
-                        Thread.Sleep(1000);
-                        Console.WriteLine("Filling fuel for the vehicle with license plate {0} completed! The current amount of fuel is {1} liters",
-                            vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy);
-                        isCompleted = true;
+                        do
+                        {
+                            try
+                            {
+                                string choiceOfFuelAmount = GetUserInput<float>($"Enter amount of fuel that you would like to fill (in liters) - {rangeToFill}:");
+                                m_Garage.RefillRegularVehicle(vehicleLicensePlate, (eFuelType)Enum.Parse(typeof(eFuelType), choiceOfFuelType), float.Parse(choiceOfFuelAmount));
+                                Thread.Sleep(1000);
+                                Console.WriteLine("Filling fuel for the vehicle with license plate {0} completed! The current amount of fuel is {1} liters",
+                                    vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy);
+                                isCompleted = true;
+                            }
+                            catch (ValueOutOfRangeException outOfRangeException)
+                            {
+                                Console.WriteLine(outOfRangeException.Message);
+                            }
+                        } while (!isCompleted);
                     }
-                    catch (ValueOutOfRangeException outOfRangeException)
+                    else
                     {
-                        Console.WriteLine(outOfRangeException.Message);
+                        Console.WriteLine("Your vehicle is fully fueled.");
                     }
-                } while (!isCompleted);
+                }   
             }
             else
             {
@@ -507,31 +523,59 @@ namespace Ex03.ConsoleUI
             string vehicleLicensePlate = GetUserInput<string>("Enter your vehicle's license plate:");
             if (m_Garage.IsVehicleExists(vehicleLicensePlate))
             {
-                do
+                if (isVehicleMatchToEnergySource(vehicleLicensePlate, eEngineType.Electric))
                 {
-                    try
+                    int maxMinutesToRefill = (int)(m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.MaxEnergyToRefill()) * 60;
+                    if (maxMinutesToRefill > 0)
                     {
-                        string choiceOfMinutesToCharge = GetUserInput<float>("Enter the number of minutes you would like to charge the vehicle:");
-                        m_Garage.RefillElectricVehicle(vehicleLicensePlate, int.Parse(choiceOfMinutesToCharge));
-                        Thread.Sleep(1000);
-                        Console.WriteLine("Charging the vehicle with license plate {0} completed! The current battery is {1} hours",
-                            vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy);
-                        isCompleted = true;
+                        do
+                        {
+                            try
+                            {
+                                string rangeToFill = $"Range [0, {maxMinutesToRefill}]";
+                                string choiceOfMinutesToCharge = GetUserInput<int>($"Enter the number of minutes you would like to charge the vehicle - {rangeToFill}:");
+                                m_Garage.RefillElectricVehicle(vehicleLicensePlate, int.Parse(choiceOfMinutesToCharge));
+                                Thread.Sleep(1000);
+                                Console.WriteLine("Charging the vehicle with license plate {0} completed! The current battery is {1} hours",
+                                    vehicleLicensePlate, m_Garage.GarageClients[vehicleLicensePlate.GetHashCode()].ClientVehicle.VehicleEnergySource.CurrentEnergy);
+                                isCompleted = true;
+                            }
+                            catch (ArgumentException argumentException)
+                            {
+                                Console.WriteLine(argumentException.Message);
+                            }
+                            catch (ValueOutOfRangeException outOfRangeException)
+                            {
+                                Console.WriteLine(outOfRangeException.Message);
+                            }
+                        } while (!isCompleted);
                     }
-                    catch (ArgumentException argumentException)
+                    else
                     {
-                        Console.WriteLine(argumentException.Message);
+                        Console.WriteLine("Your vehicle is fully charged.");
                     }
-                    catch (ValueOutOfRangeException outOfRangeException)
-                    {
-                        Console.WriteLine(outOfRangeException.Message);
-                    }
-                } while (!isCompleted); 
+                }
             }
             else
             {
                 Console.WriteLine("Vehcile does not exist in the garage!");
             } 
+        }
+
+        private bool isVehicleMatchToEnergySource(string i_VehicleLicensePlate, eEngineType i_RequiredEngineType)
+        {
+            bool isMatch = false;
+
+            try
+            {
+                isMatch = m_Garage.IsEngineTypeMatchToRequiredType(i_VehicleLicensePlate, i_RequiredEngineType);
+            }
+            catch (ArgumentException argumentException)
+            {
+                Console.WriteLine(argumentException.Message);
+            }
+
+            return isMatch;
         }
 
         public void ShowVehicleDetails()

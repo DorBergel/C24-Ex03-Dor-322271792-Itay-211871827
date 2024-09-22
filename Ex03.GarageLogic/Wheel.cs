@@ -28,7 +28,7 @@ namespace Ex03.GarageLogic
 
         public void InflateWheel(float i_InflatePressure)
         {
-            if (m_CurrentAirPressure + i_InflatePressure <= m_MaxAirPressure)
+            if (i_InflatePressure >= 0 && m_CurrentAirPressure + i_InflatePressure <= m_MaxAirPressure)
             {
                 m_CurrentAirPressure += i_InflatePressure;
             }

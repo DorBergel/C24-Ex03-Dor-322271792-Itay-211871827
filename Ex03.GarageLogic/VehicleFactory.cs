@@ -8,7 +8,7 @@ namespace Ex03.GarageLogic
 {
     public static class VehicleFactory
     {
-        public static Vehicle CreateVehicle(eVehicleType i_VehicleType, string i_VehicleVendor, string i_LicensePlate, int i_NumOfWheels, Wheel i_VehicleWheel, 
+        /*public static Vehicle CreateVehicle(eVehicleType i_VehicleType, string i_VehicleVendor, string i_LicensePlate, int i_NumOfWheels, Wheel i_VehicleWheel, 
             Energy i_VehicleEnergy, Dictionary<string, string> i_ExtraProperties)
         {
             Vehicle newVehicle = null;
@@ -17,12 +17,12 @@ namespace Ex03.GarageLogic
             {
                 case eVehicleType.RegularMotorcycle:
                     newVehicle = new Motorcycle(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, 
-                        (eLicenseType)Enum.Parse(typeof(eLicenseType), i_ExtraProperties["LicenseType"]), int.Parse(i_ExtraProperties["EngineVolume"]));
+                        (eMotorcycleLicenseType)Enum.Parse(typeof(eMotorcycleLicenseType), i_ExtraProperties["LicenseType"]), int.Parse(i_ExtraProperties["EngineVolume"]));
                     break;
 
                 case eVehicleType.ElectricMotorcycle:
                     newVehicle = new Motorcycle(i_VehicleVendor, i_LicensePlate, i_NumOfWheels, i_VehicleWheel, i_VehicleEnergy, 
-                        (eLicenseType)Enum.Parse(typeof(eLicenseType), i_ExtraProperties["LicenseType"]), int.Parse(i_ExtraProperties["EngineVolume"]));
+                        (eMotorcycleLicenseType)Enum.Parse(typeof(eMotorcycleLicenseType), i_ExtraProperties["LicenseType"]), int.Parse(i_ExtraProperties["EngineVolume"]));
                     break;
 
                 case eVehicleType.RegularCar:
@@ -43,6 +43,26 @@ namespace Ex03.GarageLogic
             }
 
             return newVehicle;
+        }*/
+
+        public static Vehicle CreateVehicle(eVehicleType i_VehicleType, string i_LicensePlate)
+        {
+            Vehicle vehicle = null;
+
+            if (i_VehicleType == eVehicleType.RegularMotorcycle || i_VehicleType == eVehicleType.ElectricMotorcycle)
+            {
+                vehicle = new Motorcycle(i_LicensePlate);
+            }
+            else if (i_VehicleType == eVehicleType.RegularCar || i_VehicleType == eVehicleType.ElectricCar)
+            {
+                vehicle = new Car(i_LicensePlate);
+            }
+            else
+            {
+                vehicle = new Truck(i_LicensePlate);
+            }
+
+            return vehicle;
         }
     }
 }

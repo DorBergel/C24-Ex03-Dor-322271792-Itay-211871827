@@ -18,7 +18,7 @@ namespace Ex03.GarageLogic
 
         public override void Refill(float i_RefillEnergy, eFuelType? i_ChosenFuelType)
         {
-            if(i_RefillEnergy + CurrentEnergy <= MaxEnergy && CheckIfFuelTypeMatch(i_ChosenFuelType))
+            if(i_RefillEnergy >= 0 && i_RefillEnergy + CurrentEnergy <= MaxEnergy && CheckIfFuelTypeMatch(i_ChosenFuelType))
             {
                 CurrentEnergy += i_RefillEnergy;
                 EnergyPercentage = (CurrentEnergy / MaxEnergy) * 100;

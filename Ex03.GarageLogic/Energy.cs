@@ -12,7 +12,7 @@ namespace Ex03.GarageLogic
         private float m_MaxEnergy;
         private float m_EnergyPercentage;
         
-        public Energy(float i_CurrentEnergy,  float i_MaxEnergy)
+        public Energy(float i_CurrentEnergy, float i_MaxEnergy)
         {
             m_MaxEnergy = i_MaxEnergy;
             if (i_CurrentEnergy >= 0 && i_CurrentEnergy <= m_MaxEnergy)
@@ -66,6 +66,11 @@ namespace Ex03.GarageLogic
             {
                 m_EnergyPercentage = value;
             }
+        }
+
+        public float MaxEnergyToRefill()
+        {
+            return m_MaxEnergy - m_CurrentEnergy;
         }
     }
 }
