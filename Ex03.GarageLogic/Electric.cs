@@ -17,6 +17,7 @@ namespace Ex03.GarageLogic
             if (i_RefillEnergy + CurrentEnergy <= MaxEnergy)
             {
                 CurrentEnergy += i_RefillEnergy;
+                EnergyPercentage = (CurrentEnergy / MaxEnergy) * 100;
             }
             else
             {
@@ -26,7 +27,7 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            return $"Battery status: {CurrentEnergy}/{MaxEnergy} ({(int)((CurrentEnergy / MaxEnergy) * 100)}%)";
+            return $"Battery status: {CurrentEnergy}/{MaxEnergy} ({EnergyPercentage}%)";
         }
     }
 }

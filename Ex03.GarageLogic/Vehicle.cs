@@ -8,10 +8,10 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        string m_VehicleVendor;
-        string m_LicensePlate;
-        Energy m_VehicleEnergySource;
-        List<Wheel> m_WheelsCollection;
+        private string m_VehicleVendor;
+        private string m_LicensePlate;
+        private Energy m_VehicleEnergySource;
+        private List<Wheel> m_WheelsCollection;
 
         public Vehicle(string i_VehicleVendor, string i_LicensePlate, int i_NumOfWheels, Wheel i_VehicleWheel, Energy i_VehicleEnergy)
         {

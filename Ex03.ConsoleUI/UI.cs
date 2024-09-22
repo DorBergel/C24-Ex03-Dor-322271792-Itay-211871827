@@ -241,10 +241,9 @@ namespace Ex03.ConsoleUI
             else
             {
                 string ownerName, ownerPhoneNumber;
-                Vehicle newClientVehicle = null;
+                int numOfWheels = 0;
                 Wheel vehicleWheel = null;
-                Fuel vehicleFuel = null;
-                Electric vehicleElectric = null;
+                Energy vehicleEnergy = null;
                 Dictionary<string, string> extraProperties = new Dictionary<string, string>();
 
                 string stringVehicleType = ChooseFromListOfOptions(Enum.GetNames(typeof(eVehicleType)), "Please choose your vehicle's type.");
@@ -256,97 +255,59 @@ namespace Ex03.ConsoleUI
                 {
                     case eVehicleType.RegularCar:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 33f);
-                        vehicleFuel = createFuelEngine("Please enter your current fuel status: ", 49f, eFuelType.Octan95);
+                        numOfWheels = 5;
+                        vehicleEnergy = createFuelEngine("Please enter your current fuel status: ", 49f, eFuelType.Octan95);
                         string carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)), "Please choose the color of your car.");
                         string numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)), "Please choose the number of doors in your car.");
                         extraProperties.Add("CarColor", carColor);
                         extraProperties.Add("NumOfDoors", numOfDoors);
-
-                        newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.RegularCar,
-                            vehicleVendor,
-                            vehicleLicensePlate,
-                            5,
-                            vehicleWheel,
-                            vehicleFuel,
-                            extraProperties);
-        
                         break;
 
                     case eVehicleType.ElectricCar:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 33f);
-                        vehicleElectric = createElectricEngine("Please enter your current battery status: ", 5f);
+                        numOfWheels = 5;
+                        vehicleEnergy = createElectricEngine("Please enter your current battery status: ", 5f);
                         carColor = ChooseFromListOfOptions(Enum.GetNames(typeof(eCarColor)), "Please choose the color of your car.");
                         numOfDoors = ChooseFromListOfOptions(Enum.GetNames(typeof(eNumOfCarDoors)), "Please choose the number of doors in your car.");
                         extraProperties.Add("CarColor", carColor);
                         extraProperties.Add("NumOfDoors", numOfDoors);
-
-                        newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.ElectricCar,
-                            vehicleVendor,
-                            vehicleLicensePlate,
-                            5,
-                            vehicleWheel,
-                            vehicleElectric,
-                            extraProperties);
-
                         break;
 
                     case eVehicleType.RegularMotorcycle:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 31f);
-                        vehicleFuel = createFuelEngine("Please enter your current fuel status: ", 6f, eFuelType.Octan98);
+                        numOfWheels = 2;
+                        vehicleEnergy = createFuelEngine("Please enter your current fuel status: ", 6f, eFuelType.Octan98);
                         string licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eLicenseType)), "Please choose type of the license.");
                         string engineVolume = GetUserInput<int>("Please enter your engine volume: ");
                         extraProperties.Add("LicenseType", licenseType);
                         extraProperties.Add("EngineVolume", engineVolume);
-
-                        newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.RegularMotorcycle,
-                            vehicleVendor,
-                            vehicleLicensePlate,
-                            2,
-                            vehicleWheel,
-                            vehicleFuel,
-                            extraProperties);
-
                         break;
 
                     case eVehicleType.ElectricMotorcycle:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 31f);
-                        vehicleElectric = createElectricEngine("Please enter your current battery status: ", 2.7f);
+                        numOfWheels = 2;
+                        vehicleEnergy = createElectricEngine("Please enter your current battery status: ", 2.7f);
                         licenseType = ChooseFromListOfOptions(Enum.GetNames(typeof(eLicenseType)), "Please choose type of the license.");
                         engineVolume = GetUserInput<int>("Please enter your engine volume: ");
                         extraProperties.Add("LicenseType", licenseType);
                         extraProperties.Add("EngineVolume", engineVolume);
-
-                        newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.ElectricMotorcycle,
-                            vehicleVendor,
-                            vehicleLicensePlate,
-                            2,
-                            vehicleWheel,
-                            vehicleElectric,
-                            extraProperties);
                         break;
 
                     case eVehicleType.Truck:
                         vehicleWheel = createWheel("Please enter the current air pressure of the wheels: ", wheelCurrentVendor, 28f);
-                        vehicleFuel = createFuelEngine("Please enter your current fuel status: ", 130f, eFuelType.Soler);
-                        string[] boolArr = new string[2] {"Yes", "No"};
+                        numOfWheels = 14;
+                        vehicleEnergy = createFuelEngine("Please enter your current fuel status: ", 130f, eFuelType.Soler);
+                        string[] boolArr = new string[2] { "Yes", "No" };
                         string isIncludeHazrdousMaterials = ChooseFromListOfOptions(boolArr, "Is the truck transporting hazardous materials?");
                         string luggageVolume = GetUserInput<float>("Please enter your luggage volume: ");
                         extraProperties.Add("IsIncludeHazardousMaterials", isIncludeHazrdousMaterials);
                         extraProperties.Add("LuggageVolume", luggageVolume);
-
-                        newClientVehicle = VehicleFactory.CreateVehicle(eVehicleType.Truck,
-                            vehicleVendor,
-                            vehicleLicensePlate,
-                            14,
-                            vehicleWheel,
-                            vehicleFuel,
-                            extraProperties);
                         break;
                 }
 
                 ownerName = GetUserInput<string>("Please enter your name");
                 ownerPhoneNumber = GetUserInput<int>("Please enter your phone number");
-                m_Garage.AddNewClient(ownerName, ownerPhoneNumber, newClientVehicle);
+                m_Garage.AddNewClient(ownerName, ownerPhoneNumber, vehicleType, vehicleVendor, vehicleLicensePlate, numOfWheels, vehicleWheel, vehicleEnergy, extraProperties);
                 if (m_Garage.IsVehicleExists(vehicleLicensePlate))
                 {
                     Console.WriteLine("Inserting vehicle with license plate {0} completed!", vehicleLicensePlate);

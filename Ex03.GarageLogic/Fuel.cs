@@ -21,6 +21,7 @@ namespace Ex03.GarageLogic
             if(i_RefillEnergy + CurrentEnergy <= MaxEnergy && CheckIfFuelTypeMatch(i_ChosenFuelType))
             {
                 CurrentEnergy += i_RefillEnergy;
+                EnergyPercentage = (CurrentEnergy / MaxEnergy) * 100;
             }
             else
             {
@@ -51,7 +52,7 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            return $"Fuel type: {m_FuelType}, Fuel status: {CurrentEnergy}/{MaxEnergy} ({(int)((CurrentEnergy / MaxEnergy) * 100)}%)";
+            return $"Fuel type: {m_FuelType}, Fuel status: {CurrentEnergy}/{MaxEnergy} ({EnergyPercentage}%)";
         }
     }
 }
